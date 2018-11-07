@@ -19,22 +19,22 @@
 {% do view.registerAssetBundle("kuriousagency\\activecampaign\\assetbundles\\activecampaign\\ActiveCampaignAsset") %}
 {% do view.registerAssetBundle("kuriousagency\\activecampaign\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
 
-{% set docsUrl = "https://github.com/KuriousAgency/active-campaign/blob/master/README.md" %}
+{% set docsUrl = "https://github.com/KuriousAgency/activecampaign/blob/master/README.md" %}
 
 {% set title = "ActiveCampaign" %}
 
-{% set pluginCpUrl = url('active-campaign') %}
+{% set pluginCpUrl = url('activecampaign') %}
 
 {% set iconUrl = view.getAssetManager().getPublishedUrl('@kuriousagency/activecampaign/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
 
 {% set extraPageHeaderHtml %}
     <div class="buttons">
-        <a href="{{ pluginCpUrl }}" class="btn submit add icon">{{ "Click Me!"|t('active-campaign') }}</a>
+        <a href="{{ pluginCpUrl }}" class="btn submit add icon">{{ "Click Me!"|t('activecampaign') }}</a>
     </div>
 {% endset %}
 
 {% set content %}
-    <h2>{{ "Index CP Section body goes here"|t('active-campaign') }}</h2>
+    <h2>{{ "Index CP Section body goes here"|t('activecampaign') }}</h2>
     <img src="{{ iconUrl }}" height="64" width="64" />
     <p class="textline"></p>
 {% endset %}

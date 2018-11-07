@@ -66,7 +66,7 @@ class ActiveCampaign extends Plugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_SITE_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules['siteActionTrigger1'] = 'active-campaign/default';
+                $event->rules['siteActionTrigger1'] = 'activecampaign/default';
             }
         );
 
@@ -74,7 +74,7 @@ class ActiveCampaign extends Plugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules['cpActionTrigger1'] = 'active-campaign/default/do-something';
+                $event->rules['cpActionTrigger1'] = 'activecampaign/default/do-something';
             }
         );
 
@@ -99,7 +99,7 @@ class ActiveCampaign extends Plugin
 
         Craft::info(
             Craft::t(
-                'active-campaign',
+                'activecampaign',
                 '{name} plugin loaded',
                 ['name' => $this->name]
             ),
@@ -124,7 +124,7 @@ class ActiveCampaign extends Plugin
     protected function settingsHtml(): string
     {
         return Craft::$app->view->renderTemplate(
-            'active-campaign/settings',
+            'activecampaign/settings',
             [
                 'settings' => $this->getSettings()
             ]
