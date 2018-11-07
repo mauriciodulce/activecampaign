@@ -14,6 +14,7 @@ use kuriousagency\activecampaign\ActiveCampaign;
 
 use Craft;
 use craft\base\Component;
+use GuzzleHttp\Client;
 
 /**
  * @author    Kurious Agency
@@ -25,15 +26,37 @@ class ActiveCampaignService extends Component
     // Public Methods
     // =========================================================================
 
+
+	public function init()
+    {
+        $settings = ActiveCampaign::$plugin->getSettings();
+        $this->apiKey = $settings->apiKey;
+        $this->account = $settings->account;
+
+        $this->client = new Client("https://{$this->account}.api-us1.com");
+        
+        parent::init();
+    }
+
     /*
      * @return mixed
      */
-    public function exampleService()
+    public function createContact()
     {
-        $result = 'something';
-        // Check our Plugin's settings for `someAttribute`
-        if (ActiveCampaign::$plugin->getSettings()->someAttribute) {
-        }
+		
+		// $client = new Client;
+		// $response = $client->request('POST', $endpoint, [
+		// 	'form_params' => [
+		// 		'applicationNo' => $applicationNo, 	//Application number
+		// 		'id' => $this->_accountId,			//username
+		// 		'id2' => $this->_password,			//pasword
+		// 		'status' => $status					//status  G or C see above 
+		// 	]
+		// ]);	
+		
+		
+       
+      
 
         return $result;
     }

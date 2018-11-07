@@ -18,9 +18,19 @@
 {% do view.registerAssetBundle("kuriousagency\\activecampaign\\assetbundles\\activecampaign\\ActiveCampaignAsset") %}
 
 {{ forms.textField({
-    label: 'Some Field',
-    instructions: 'Enter some setting here.',
-    id: 'someAttribute',
-    name: 'someAttribute',
-    value: settings['someAttribute']})
+    label: 'Account',
+    instructions: '',
+    id: 'account',
+    name: 'account', 
+    required: true,
+    value: settings['account']})
+}}
+
+{{ forms.textField({
+    label: 'API Key',
+    instructions: '',
+    id: 'apiKey',
+    name: 'apiKey', 
+    required: true,
+    value: settings['apiKey']})
 }}

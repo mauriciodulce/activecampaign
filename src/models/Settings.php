@@ -28,7 +28,8 @@ class Settings extends Model
     /**
      * @var string
      */
-    public $someAttribute = 'Some Default';
+    public $account;
+    public $apiKey;
 
     // Public Methods
     // =========================================================================
@@ -39,8 +40,7 @@ class Settings extends Model
     public function rules()
     {
         return [
-            ['someAttribute', 'string'],
-            ['someAttribute', 'default', 'value' => 'Some Default'],
+            [['account','apiKey'],'required']
         ];
     }
 }
