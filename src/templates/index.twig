@@ -13,7 +13,7 @@
  */
 #}
 
-{% extends "_layouts/cp" %}
+{# {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
 {% do view.registerAssetBundle("kuriousagency\\activecampaign\\assetbundles\\activecampaign\\ActiveCampaignAsset") %}
@@ -37,4 +37,6 @@
     <h2>{{ "Index CP Section body goes here"|t('activecampaign') }}</h2>
     <img src="{{ iconUrl }}" height="64" width="64" />
     <p class="textline"></p>
-{% endset %}
+{% endset %} #}
+
+{% redirect 'activecampaign/forms' %}

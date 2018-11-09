@@ -20,7 +20,7 @@ use craft\web\Controller;
  * @package   ActiveCampaign
  * @since     1.0.0
  */
-class DefaultController extends Controller
+class TagsController extends Controller
 {
 
     // Protected Properties
@@ -31,28 +31,17 @@ class DefaultController extends Controller
      *         The actions must be in 'kebab-case'
      * @access protected
      */
-    protected $allowAnonymous = ['index', 'do-something'];
+    protected $allowAnonymous = [];
 
     // Public Methods
     // =========================================================================
 
-    /**
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $result = 'Welcome to the DefaultController actionIndex() method';
 
-        return $result;
-    }
+	public function actionSyncTags() {
+		
+		$response = ActiveCampaign::$plugin->tags->syncTags();
 
-    /**
-     * @return mixed
-     */
-    public function actionDoSomething()
-    {
-        $result = 'Welcome to the DefaultController actionDoSomething() method';
+		Craft::$app->end();
 
-        return $result;
-    }
+	}
 }

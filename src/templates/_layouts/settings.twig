@@ -1,0 +1,52 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * ActiveCampaign plugin for Craft CMS 3.x
+ *
+ * ActiveCampaign Settings.twig
+ *
+ * @author    Kurious Agency
+ * @copyright Copyright (c) 2018 Kurious Agency
+ * @link      https://kurious.agency
+ * @package   ActiveCampaign
+ * @since     1.0.0
+ */
+#}
+
+{% extends "_layouts/cp" %}
+{% requireAdmin %}
+{% set selectedSubnavItem = 'settings' %}
+{% import "_includes/forms" as forms %}
+
+{% set title = "Active Campaign Settings" %}
+
+
+{# {% do view.registerAssetBundle("kuriousagency\\activecampaign\\assetbundles\\activecampaign\\ActiveCampaignAsset") %} #}
+
+{% block content %}
+
+{{ forms.textField({
+    label: 'Account',
+    instructions: '',
+    id: 'account',
+    name: 'account', 
+    required: true,
+    value: settings['account']})
+}}
+
+{{ forms.textField({
+    label: 'API Key',
+    instructions: '',
+    id: 'apiKey',
+    name: 'apiKey', 
+    required: true,
+    value: settings['apiKey']})
+}}
+
+{# 
+TODO 
+	- add get tags button
+	- add get custom fields button
+#}
+
+{% endblock %}
