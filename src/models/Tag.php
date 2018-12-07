@@ -20,7 +20,7 @@ use craft\base\Model;
  * @package   ActiveCampaign
  * @since     1.0.0
  */
-class Settings extends Model
+class Tag extends Model
 {
     // Public Properties
     // =========================================================================
@@ -28,8 +28,9 @@ class Settings extends Model
     /**
      * @var string
      */
-    public $account;
-    public $apiKey;
+	public $id;
+
+	public $name;
 
     // Public Methods
     // =========================================================================
@@ -40,7 +41,7 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['account','apiKey'],'required']
+            [['name'], 'required'],
         ];
     }
 }

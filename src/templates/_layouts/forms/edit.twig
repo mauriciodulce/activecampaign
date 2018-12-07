@@ -1,0 +1,99 @@
+{% extends "_layouts/cp" %}
+
+{% set title = "Freeform Forms" %}
+{% set fullPageForm = true %}
+{% import "_includes/forms" as forms %}
+
+
+{# TODO get all fields for the freeform form #}
+
+{% block content %}
+
+	{{ forms.hidden({
+    	name: 'action',
+    	value: 'activecampaign/form-mapping/save',
+  	})}}
+
+	{{ redirectInput('activecampaign/forms') }}
+	
+	{% if formMapping.id %}
+		{{ forms.hidden({
+			name: 'id',
+			value: formMapping.id,
+		})}}
+	{% endif %}
+
+	{{ forms.hidden({
+		name: 'formId',
+		value: formId,
+	})}}
+
+	{% set fieldOptions = [{'value': null, 'label': 'Please Select'}] %}
+	{% for field in fields %}
+		{% set fieldOptions = fieldOptions|merge([{'value': field.handle, 'label': field.name}]) %}
+	{% endfor %}
+
+	<div class="tableview">
+		<table class="data fullwidth">
+			<thead>
+				<tr>
+					<th>Freeform Field</th>
+					<th>ActiveCampaign Field</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for id,label in formFields %}
+					<tr>
+						<td>
+							{{ label }}
+						</td>
+						<td>
+							{{ forms.selectField({
+								required: true,
+								id: 'acField',
+								name: 'acField['~ id ~']',
+								value: acFieldValues[id] is defined ? acFieldValues[id] : '',
+								options: fieldOptions,
+							})}}
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	{{ forms.multiselectField({
+        label: 'Tags',
+        instructions: 'Select the Active Campaign tags for this form.',
+        id: 'tags',
+        name: 'tags',
+        options: tags,
+		values: tagIds,
+        class: 'selectize fullwidth',
+    }) }}
+{# 
+	{{ forms.multiselectField({
+        label: 'Tags',
+        instructions: 'Select the Active Campaign tags for this form.',
+        id: 'tags',
+        name: 'tags',
+        options: tags,
+		values: emailIds is defined ? emailIds : ticketStatus.getEmailIds(),
+        errors: ticketStatus.getErrors('emails'),
+        class: 'selectize fullwidth',
+    }) }} #}
+
+
+	
+
+{% endblock %}
+
+{% js %}
+    $(function () {
+
+        $('#tags').selectize({
+            plugins: ['remove_button'],
+            dropdownParent: 'body'
+        });
+    });
+{% endjs %}

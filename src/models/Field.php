@@ -3,6 +3,8 @@
  * ActiveCampaign plugin for Craft CMS 3.x
  *
  * Active Campaign plugin for Craft CMS
+ * 
+ * Gets Active Campagin fields
  *
  * @link      https://kurious.agency
  * @copyright Copyright (c) 2018 Kurious Agency
@@ -20,7 +22,7 @@ use craft\base\Model;
  * @package   ActiveCampaign
  * @since     1.0.0
  */
-class Settings extends Model
+class Field extends Model
 {
     // Public Properties
     // =========================================================================
@@ -28,8 +30,13 @@ class Settings extends Model
     /**
      * @var string
      */
-    public $account;
-    public $apiKey;
+	public $id;
+
+	public $acFieldId;
+
+	public $name;
+
+	public $handle;
 
     // Public Methods
     // =========================================================================
@@ -40,7 +47,7 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['account','apiKey'],'required']
+            [['name', 'handle'], 'required'],
         ];
     }
 }

@@ -1,0 +1,30 @@
+{% extends "_layouts/cp" %}
+
+{# {% import "_includes/forms" as forms %} #}
+
+{% set title = "Freeform Forms" %}
+
+{% block content %}
+
+<div class="tableview">
+	<table class="data fullwidth">
+		<thead>
+			<tr>
+				<th>Freeform Form</th>
+				<th>Tags</th>
+				<th>Edit</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for form in forms %}
+			<tr>
+				<td>{{ form.name }}</td>
+				<td>{{ form.tags }}</td>
+				<td><a class="btn submit icon" href="{{ cpUrl('activecampaign/forms/' ~ form.id) }}">Edit</a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+{% endblock %}

@@ -20,7 +20,7 @@ use craft\base\Model;
  * @package   ActiveCampaign
  * @since     1.0.0
  */
-class Settings extends Model
+class FormMapping extends Model
 {
     // Public Properties
     // =========================================================================
@@ -28,8 +28,13 @@ class Settings extends Model
     /**
      * @var string
      */
-    public $account;
-    public $apiKey;
+	public $id;
+
+	public $formId;
+
+	public $fieldMappingJson;
+
+	public $tagsJson;
 
     // Public Methods
     // =========================================================================
@@ -40,7 +45,18 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['account','apiKey'],'required']
+            [['formId'], 'required'],
         ];
-    }
+	}
+
+	// public function getTagIds(): array
+	// {
+	// 	$formMappingModel = $this->formId ? ActiveCampaign::getInstance()->formMapping->getFormMappingByFormId($this->formId) : [];
+
+	// 	if(!$formMappingModel) {
+	// 		return [];
+	// 	}
+
+	// 	return json_decode($formMappingModel['tagsJson']);
+	// }
 }
