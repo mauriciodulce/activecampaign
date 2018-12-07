@@ -8,33 +8,40 @@
  * @copyright Copyright (c) 2018 Kurious Agency
  */
 
-namespace kuriousagency\activecampaign\services;
+namespace kuriousagency\activecampaign\models;
 
 use kuriousagency\activecampaign\ActiveCampaign;
 
 use Craft;
-use craft\base\Component;
+use craft\base\Model;
 
 /**
  * @author    Kurious Agency
  * @package   ActiveCampaign
  * @since     1.0.0
  */
-class ActiveCampaignService extends Component
+class Tag extends Model
 {
+    // Public Properties
+    // =========================================================================
+
+    /**
+     * @var string
+     */
+	public $id;
+
+	public $name;
+
     // Public Methods
     // =========================================================================
 
-    /*
-     * @return mixed
+    /**
+     * @inheritdoc
      */
-    public function exampleService()
+    public function rules()
     {
-        $result = 'something';
-        // Check our Plugin's settings for `someAttribute`
-        if (ActiveCampaign::$plugin->getSettings()->someAttribute) {
-        }
-
-        return $result;
+        return [
+            [['name'], 'required'],
+        ];
     }
 }

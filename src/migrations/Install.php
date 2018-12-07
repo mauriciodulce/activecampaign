@@ -8,13 +8,16 @@
  * @copyright Copyright (c) 2018 Kurious Agency
  */
 
+
 namespace kuriousagency\activecampaign\migrations;
 
 use kuriousagency\activecampaign\ActiveCampaign;
+use kuriousagency\activecampaign\records\Field as FieldRecord;
 
 use Craft;
 use craft\config\DbConfig;
 use craft\db\Migration;
+use craft\helpers\MigrationHelper;
 
 /**
  * @author    Kurious Agency
@@ -41,7 +44,7 @@ class Install extends Migration
     {
         $this->driver = Craft::$app->getConfig()->getDb()->driver;
         if ($this->createTables()) {
-            $this->createIndexes();
+            // $this->createIndexes();
             $this->addForeignKeys();
             // Refresh the db schema caches
             Craft::$app->db->schema->refresh();
@@ -56,7 +59,8 @@ class Install extends Migration
      */
     public function safeDown()
     {
-        $this->driver = Craft::$app->getConfig()->getDb()->driver;
+		$this->driver = Craft::$app->getConfig()->getDb()->driver;
+		$this->dropForeignKeys();
         $this->removeTables();
 
         return true;
@@ -72,63 +76,94 @@ class Install extends Migration
     {
         $tablesCreated = false;
 
-        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%activecampaign_activecampaignrecord}}');
+        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%activecampaign_field}}');
         if ($tableSchema === null) {
             $tablesCreated = true;
             $this->createTable(
-                '{{%activecampaign_activecampaignrecord}}',
+                '{{%activecampaign_field}}',
                 [
                     'id' => $this->primaryKey(),
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
-                    'siteId' => $this->integer()->notNull(),
-                    'some_field' => $this->string(255)->notNull()->defaultValue(''),
+					 // Custom columns in the table
+					'acFieldId' => $this->integer(255),
+					'name' => $this->string(255)->notNull()->defaultValue(''),
+					'handle' => $this->string(255)->notNull()->defaultValue(''),
                 ]
-            );
+			);
+			
+			$this->createTable(
+                '{{%activecampaign_form_mapping}}',
+                [
+                    'id'            => $this->primaryKey(),
+                    'dateCreated'   => $this->dateTime()->notNull(),
+                    'dateUpdated'   => $this->dateTime()->notNull(),
+                    'uid'           => $this->uid(),
+					// Custom columns in the table
+					'formId' => $this->integer(), // freeform form id
+					'fieldMappingJson' => $this->text(), //handle=>id
+					'tagsJson' => $this->text(),
+                ]
+			);
+
+			$this->createTable(
+                '{{%activecampaign_tag}}',
+                [
+                    'id'            => $this->primaryKey(),
+                    'dateCreated'   => $this->dateTime()->notNull(),
+                    'dateUpdated'   => $this->dateTime()->notNull(),
+                    'uid'           => $this->uid(),
+					// Custom columns in the table
+					'name' => $this->text(),
+                ]
+			);
+
         }
 
         return $tablesCreated;
     }
 
-    /**
-     * @return void
-     */
-    protected function createIndexes()
-    {
-        $this->createIndex(
-            $this->db->getIndexName(
-                '{{%activecampaign_activecampaignrecord}}',
-                'some_field',
-                true
-            ),
-            '{{%activecampaign_activecampaignrecord}}',
-            'some_field',
-            true
-        );
-        // Additional commands depending on the db driver
-        switch ($this->driver) {
-            case DbConfig::DRIVER_MYSQL:
-                break;
-            case DbConfig::DRIVER_PGSQL:
-                break;
-        }
-    }
+    // /**
+    //  * @return void
+    //  */
+    // protected function createIndexes()
+    // {
+    //     $this->createIndex(
+    //         $this->db->getIndexName(
+    //             '{{%activecampaign_field}}',
+    //             'some_field',
+    //             true
+    //         ),
+    //         '{{%activecampaign_field}}',
+    //         'some_field',
+    //         true
+    //     );
+    //     // Additional commands depending on the db driver
+    //     switch ($this->driver) {
+    //         case DbConfig::DRIVER_MYSQL:
+    //             break;
+    //         case DbConfig::DRIVER_PGSQL:
+    //             break;
+    //     }
+    // }
 
     /**
      * @return void
      */
     protected function addForeignKeys()
     {
-        $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%activecampaign_activecampaignrecord}}', 'siteId'),
-            '{{%activecampaign_activecampaignrecord}}',
-            'siteId',
-            '{{%sites}}',
-            'id',
-            'CASCADE',
-            'CASCADE'
-        );
+        // $this->addForeignKey(
+        //     $this->db->getForeignKeyName('{{%activecampaign_field}}', 'siteId'),
+        //     '{{%activecampaign_field}}',
+        //     'siteId',
+        //     '{{%sites}}',
+        //     'id',
+        //     'CASCADE',
+        //     'CASCADE'
+		// );
+		
+		$this->addForeignKey(null, '{{%activecampaign_form_mapping}}', ['formId'], '{{%freeform_forms}}', ['id'], null, 'CASCADE');
     }
 
     /**
@@ -136,6 +171,42 @@ class Install extends Migration
      */
     protected function insertDefaultData()
     {
+		// Default fields
+		$data = [
+            'name'      => 'First Name',
+            'handle'    => 'FIRSTNAME',
+        ];
+		$this->insert(FieldRecord::tableName(), $data);
+		
+		$data = [
+            'name'      => 'Last Name',
+            'handle'    => 'LASTNAME',
+        ];
+		$this->insert(FieldRecord::tableName(), $data);
+		
+		$data = [
+            'name'      => 'Email',
+            'handle'    => 'EMAIL',
+        ];
+		$this->insert(FieldRecord::tableName(), $data);
+		
+		$data = [
+            'name'      => 'Phone',
+            'handle'    => 'PHONE',
+        ];
+		$this->insert(FieldRecord::tableName(), $data);
+		
+		$data = [
+            'name'      => 'Note',
+            'handle'    => 'NOTE',
+        ];
+        $this->insert(FieldRecord::tableName(), $data);
+		
+	}
+	
+	protected function dropForeignKeys()
+    {
+        // MigrationHelper::dropAllForeignKeysOnTable('{{%activecampaign_fieldmapping}}', $this);
     }
 
     /**
@@ -143,6 +214,8 @@ class Install extends Migration
      */
     protected function removeTables()
     {
-        $this->dropTableIfExists('{{%activecampaign_activecampaignrecord}}');
+        $this->dropTableIfExists('{{%activecampaign_field}}');
+        $this->dropTableIfExists('{{%activecampaign_form_mapping}}');
+        $this->dropTableIfExists('{{%activecampaign_tag}}');
     }
 }

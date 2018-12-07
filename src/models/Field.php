@@ -3,33 +3,51 @@
  * ActiveCampaign plugin for Craft CMS 3.x
  *
  * Active Campaign plugin for Craft CMS
+ * 
+ * Gets Active Campagin fields
  *
  * @link      https://kurious.agency
  * @copyright Copyright (c) 2018 Kurious Agency
  */
 
-namespace kuriousagency\activecampaign\records;
+namespace kuriousagency\activecampaign\models;
 
 use kuriousagency\activecampaign\ActiveCampaign;
 
 use Craft;
-use craft\db\ActiveRecord;
+use craft\base\Model;
 
 /**
  * @author    Kurious Agency
  * @package   ActiveCampaign
  * @since     1.0.0
  */
-class ActiveCampaignRecord extends ActiveRecord
+class Field extends Model
 {
-    // Public Static Methods
+    // Public Properties
+    // =========================================================================
+
+    /**
+     * @var string
+     */
+	public $id;
+
+	public $acFieldId;
+
+	public $name;
+
+	public $handle;
+
+    // Public Methods
     // =========================================================================
 
     /**
      * @inheritdoc
      */
-    public static function tableName()
+    public function rules()
     {
-        return '{{%activecampaign_activecampaignrecord}}';
+        return [
+            [['name', 'handle'], 'required'],
+        ];
     }
 }

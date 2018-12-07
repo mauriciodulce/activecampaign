@@ -20,7 +20,7 @@ use craft\web\Controller;
  * @package   ActiveCampaign
  * @since     1.0.0
  */
-class DefaultController extends Controller
+class TagsController extends Controller
 {
 
     // Protected Properties
@@ -31,28 +31,31 @@ class DefaultController extends Controller
      *         The actions must be in 'kebab-case'
      * @access protected
      */
-    protected $allowAnonymous = ['index', 'do-something'];
+    protected $allowAnonymous = [];
 
     // Public Methods
     // =========================================================================
 
-    /**
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $result = 'Welcome to the DefaultController actionIndex() method';
 
-        return $result;
-    }
+	public function actionUpdate() {
+		
+		$response = ActiveCampaign::$plugin->tags->updateTags();
 
-    /**
-     * @return mixed
-     */
-    public function actionDoSomething()
-    {
-        $result = 'Welcome to the DefaultController actionDoSomething() method';
+		Craft::$app->getSession()->setNotice("Tags Updated");
+		
+		return $this->redirect('/admin/activecampaign/settings');
+		
+	}
 
-        return $result;
-    }
+
+	public function actionGetSiteTracking()
+	{
+		$trackingStatus = ActiveCampaign::$plugin->tracking->getSiteTracking();
+
+		// echo $trackingStatus;
+
+		Craft::dd($trackingStatus);
+
+		Craft::$app->end();
+	}
 }

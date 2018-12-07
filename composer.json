@@ -1,5 +1,5 @@
 {
-    "name": "kuriousagency/active-campaign",
+    "name": "kuriousagency/activecampaign",
     "description": "Active Campaign plugin for Craft CMS",
     "type": "craft-plugin",
     "version": "1.0.0",
@@ -11,8 +11,8 @@
         "activecampaign"
     ],
     "support": {
-        "docs": "https://github.com/KuriousAgency/active-campaign/blob/master/README.md",
-        "issues": "https://github.com/KuriousAgency/active-campaign/issues"
+        "docs": "https://github.com/KuriousAgency/activecampaign/blob/master/README.md",
+        "issues": "https://github.com/KuriousAgency/activecampaign/issues"
     },
     "license": "MIT",
     "authors": [
@@ -31,10 +31,10 @@
     },
     "extra": {
         "name": "ActiveCampaign",
-        "handle": "active-campaign",
+        "handle": "activecampaign",
         "hasCpSettings": true,
         "hasCpSection": true,
-        "changelogUrl": "https://raw.githubusercontent.com/KuriousAgency/active-campaign/master/CHANGELOG.md",
+        "changelogUrl": "https://raw.githubusercontent.com/KuriousAgency/activecampaign/master/CHANGELOG.md",
         "components": {
             "activeCampaignService": "kuriousagency\\activecampaign\\services\\ActiveCampaignService"
         },

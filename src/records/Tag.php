@@ -8,39 +8,28 @@
  * @copyright Copyright (c) 2018 Kurious Agency
  */
 
-namespace kuriousagency\activecampaign\models;
+namespace kuriousagency\activecampaign\records;
 
 use kuriousagency\activecampaign\ActiveCampaign;
 
 use Craft;
-use craft\base\Model;
+use craft\db\ActiveRecord;
 
 /**
  * @author    Kurious Agency
  * @package   ActiveCampaign
  * @since     1.0.0
  */
-class Settings extends Model
+class Tag extends ActiveRecord
 {
-    // Public Properties
-    // =========================================================================
-
-    /**
-     * @var string
-     */
-    public $account;
-    public $apiKey;
-
-    // Public Methods
+    // Public Static Methods
     // =========================================================================
 
     /**
      * @inheritdoc
      */
-    public function rules()
+    public static function tableName()
     {
-        return [
-            [['account','apiKey'],'required']
-        ];
+        return '{{%activecampaign_tag}}';
     }
 }
