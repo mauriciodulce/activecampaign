@@ -29,11 +29,16 @@ class Tags extends Component
     // =========================================================================
 
 
-	public function syncTags()
+	public function updateTags()
 	{
+		
+		$acTagIds = [];
+		
 		$response = ActiveCampaign::$plugin->api->get('tags');
 
 		foreach($response->tags as $tag) {
+
+			$acTagIds[] = $tag->id;
 
 			$tagModel = $this->getTagById($tag->id);
 
@@ -48,7 +53,8 @@ class Tags extends Component
 
 		}
 
-		// foreach($response as )
+		$this->removeDeletedTags($acTagIds);
+
 
 		return true;
 	}
@@ -64,6 +70,23 @@ class Tags extends Component
 		}
 		
 		return $tags;
+	}
+
+	public function getTagNameById($id)
+	{
+		
+		if(!$id) {
+			return false;
+		}
+
+		$tagNames = [];
+		$tags = $this->getTagsById($id);
+
+		foreach($tags as $tag) {
+			$tagNames[] = $tag['name'];
+		}
+
+		return implode(", ",$tagNames);
 	}
 
 	public function saveTag(TagModel $model)
@@ -108,14 +131,78 @@ class Tags extends Component
 
         return new TagModel($result);
 	}
+
+	public function getTagsById($id)
+	{
+		$result = $this->_createTagQuery()
+            ->where(['id' => $id])
+            ->all();
+
+        return $result;
+	}
+
+	public function getTagNamesByFormId($formId)
+	{
+
+		$tagNames = "";
+		
+		$formMapping = ActiveCampaign::$plugin->formMapping->getFormMappingByFormId($formId);
+		
+		$tagIds = json_decode($formMapping['tagsJson'],true);
+
+		if($tagIds) {
+			$tagNames = $this->getTagNameById($tagIds);
+		}
+
+		return $tagNames;
+
+	}
+
+	public function getTagsByFormId($formId)
+	{
+		$tagIds = [];
+
+		$formMapping = ActiveCampaign::$plugin->formMapping->getFormMappingByFormId($formId);
+		
+		$tagIds = json_decode($formMapping['tagsJson'],true);
+
+		return $tagIds;
+	}
+
+	public function removeDeletedTags($acTagIds)
+	{
+		$allTags = $this->getAllTags();
+	
+		foreach($allTags as $tag) {
+
+			if(!in_array($tag->id,$acTagIds)) {
+				$this->deleteTagById($tag->id);
+			}
+
+		}
+
+		return true;
+	}
+
+	public function deleteTagById(int $id): bool
+    {
+        $tag = TagRecord::findOne($id);
+
+        if (!$tag) {
+            return false;
+        }
+
+        return (bool)$tag->delete();
+    }
 	
 	private function _createTagQuery()
-    {
-        return (new Query())
-            ->select([
-                'id',
-                'name',
-            ])
-            ->from(['{{%activecampaign_tag}}']);
-    }
+	{
+		return (new Query())
+			->select([
+				'id',
+				'name',
+			])
+			->from(['{{%activecampaign_tag}}']);
+	}
+	
 }

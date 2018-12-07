@@ -37,23 +37,13 @@ class FieldsController extends Controller
     // =========================================================================
 
 
-	public function actionSyncFields() {
+	public function actionUpdate() {
 		
-		$response = ActiveCampaign::$plugin->fields->syncFields();
+		$response = ActiveCampaign::$plugin->fields->updateFields();
 
-		Craft::$app->end();
-
-	}
-
-	public function actionSaveFieldMapping() {
+		Craft::$app->getSession()->setNotice("Fields Updated");
 		
-		$this->requirePostRequest();
-
-		$request = Craft::$app->getRequest();
-		$id = $request->post('id');
-		
-
-		//get 
+		return $this->redirect('/admin/activecampaign/settings');
 
 	}
 

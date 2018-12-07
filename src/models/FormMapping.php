@@ -47,5 +47,16 @@ class FormMapping extends Model
         return [
             [['formId'], 'required'],
         ];
-    }
+	}
+
+	// public function getTagIds(): array
+	// {
+	// 	$formMappingModel = $this->formId ? ActiveCampaign::getInstance()->formMapping->getFormMappingByFormId($this->formId) : [];
+
+	// 	if(!$formMappingModel) {
+	// 		return [];
+	// 	}
+
+	// 	return json_decode($formMappingModel['tagsJson']);
+	// }
 }

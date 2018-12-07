@@ -52,6 +52,7 @@
 								required: true,
 								id: 'acField',
 								name: 'acField['~ id ~']',
+								value: acFieldValues[id] is defined ? acFieldValues[id] : '',
 								options: fieldOptions,
 							})}}
 						</td>
@@ -61,13 +62,13 @@
 		</table>
 	</div>
 
-	{# TODO get values #}
 	{{ forms.multiselectField({
         label: 'Tags',
         instructions: 'Select the Active Campaign tags for this form.',
         id: 'tags',
         name: 'tags',
         options: tags,
+		values: tagIds,
         class: 'selectize fullwidth',
     }) }}
 {# 

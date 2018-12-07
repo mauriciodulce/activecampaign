@@ -10,7 +10,7 @@
 	<table class="data fullwidth">
 		<thead>
 			<tr>
-				<th>Form</th>
+				<th>Freeform Form</th>
 				<th>Tags</th>
 				<th>Edit</th>
 			</tr>
@@ -19,7 +19,7 @@
 			{% for form in forms %}
 			<tr>
 				<td>{{ form.name }}</td>
-				<td>Tags</td>
+				<td>{{ form.tags }}</td>
 				<td><a class="btn submit icon" href="{{ cpUrl('activecampaign/forms/' ~ form.id) }}">Edit</a></td>
 			</tr>
 			{% endfor %}

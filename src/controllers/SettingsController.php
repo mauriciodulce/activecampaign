@@ -32,23 +32,23 @@ class SettingsController extends Controller
     {
         parent::init();
 
-        $this->settings = ActiveCampaign::$plugin->getSettings();
-        if (!$this->settings->validate()) {
-            throw new InvalidConfigException('Support settings don’t validate.');
-        }
+		$this->settings = ActiveCampaign::$plugin->getSettings();
+
+        // if (!$this->settings->validate()) {
+        //     throw new InvalidConfigException('Support settings don’t validate.');
+        // }
     }
 
     public function actionIndex()
     {
-        // $systemEmail = Craft::$app->systemSettings->getSetting('email', 'fromEmail');
-        // $systemSender = Craft::$app->systemSettings->getSetting('email', 'fromName');
-        // $settings = $this->settings;
-		// $plugin = Support::$plugin;
-		
+
+       
+		$plugin = ActiveCampaign::$plugin;
 		$settings = $this->settings;
 
         $variables = [
 			'settings' => $settings,
+			'plugin'       => $plugin,
           	'apiKey'   => $settings->apiKey,
           	'account'  => $settings->account,
         ];

@@ -37,11 +37,25 @@ class TagsController extends Controller
     // =========================================================================
 
 
-	public function actionSyncTags() {
+	public function actionUpdate() {
 		
-		$response = ActiveCampaign::$plugin->tags->syncTags();
+		$response = ActiveCampaign::$plugin->tags->updateTags();
+
+		Craft::$app->getSession()->setNotice("Tags Updated");
+		
+		return $this->redirect('/admin/activecampaign/settings');
+		
+	}
+
+
+	public function actionGetSiteTracking()
+	{
+		$trackingStatus = ActiveCampaign::$plugin->tracking->getSiteTracking();
+
+		// echo $trackingStatus;
+
+		Craft::dd($trackingStatus);
 
 		Craft::$app->end();
-
 	}
 }

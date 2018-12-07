@@ -14,6 +14,7 @@
 #}
 
 {% extends "_layouts/cp" %}
+{% set fullPageForm = true %}
 {% requireAdmin %}
 {% set selectedSubnavItem = 'settings' %}
 {% import "_includes/forms" as forms %}
@@ -25,11 +26,21 @@
 
 {% block content %}
 
+  {{ forms.hidden({
+      name: 'action',
+      value: 'plugins/save-plugin-settings'
+  })}}
+
+  {{ forms.hidden({
+      name: 'pluginHandle',
+      value: plugin.handle
+  })}}
+
 {{ forms.textField({
     label: 'Account',
     instructions: '',
     id: 'account',
-    name: 'account', 
+    name: 'settings[account]', 
     required: true,
     value: settings['account']})
 }}
@@ -38,15 +49,20 @@
     label: 'API Key',
     instructions: '',
     id: 'apiKey',
-    name: 'apiKey', 
+    name: 'settings[apiKey]', 
     required: true,
     value: settings['apiKey']})
 }}
 
-{# 
-TODO 
-	- add get tags button
-	- add get custom fields button
-#}
+{% if settings['account'] is not empty and settings['apiKey'] is not empty %}
+
+	<h2>Tags</h2>
+	<p><a href="{{ actionUrl('activecampaign/tags/update') }}" class="btn submit">Update</a></p>
+	<br>
+
+	<h2>Custom Fields</h2>
+	<p><a href="{{ actionUrl('activecampaign/fields/update') }}" class="btn submit">Update</a></p>
+
+{% endif %}
 
 {% endblock %}

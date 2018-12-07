@@ -15,6 +15,7 @@ use kuriousagency\activecampaign\services\Contacts as ContactsService;
 use kuriousagency\activecampaign\services\Tags as TagsService;
 use kuriousagency\activecampaign\services\Fields as FieldsService;
 use kuriousagency\activecampaign\services\FormMapping as FormMappingService;
+use kuriousagency\activecampaign\services\Tracking as TrackingService;
 
 use kuriousagency\activecampaign\variables\ActiveCampaignVariable;
 use kuriousagency\activecampaign\models\Settings;
@@ -26,7 +27,12 @@ use craft\events\PluginEvent;
 use craft\web\UrlManager;
 use craft\web\twig\variables\CraftVariable;
 use craft\events\RegisterUrlRulesEvent;
+
 use Solspace\Freeform\Services\FormsService;
+use Solspace\Freeform\Services\SubmissionsService;
+use Solspace\Freeform\Events\Forms\AfterSubmitEvent;
+use Solspace\Freeform\Events\Submissions\SubmitEvent;
+
 
 use yii\base\Event;
 
@@ -74,6 +80,7 @@ class ActiveCampaign extends Plugin
 			'tags' => TagsService::class,
 			'fields' => FieldsService::class,
 			'formMapping' => FormMappingService::class,
+			'tracking' => TrackingService::class,
 		]);
 
         // Event::on(
@@ -117,14 +124,36 @@ class ActiveCampaign extends Plugin
 		Event::on(
             FormsService::class,
             FormsService::EVENT_AFTER_SUBMIT,
-            function (SaveEvent $event) {
+            function (AfterSubmitEvent $event) {
                 $form  = $event->getForm();
 				$submission = $event->getSubmission();
-				
-				exit("here");
-                // Do something with this data
+
+				foreach($submission->fieldMetadata as $fieldData) {
+					$data[$fieldData->getId()] = $fieldData->getValue();
+				}
+
+				ActiveCampaign::$plugin->contacts->createOrUpdateContact($submission->formId,$data);
+            
             }
-        );
+		);
+		
+		// Event::on(
+        //     SubmissionsService::class,
+        //     SubmissionsService::EVENT_AFTER_SUBMIT,
+        //     function (SubmitEvent $event) {
+        //         $submission = $event->getElement();
+		// 		$form       = $event->getForm();
+
+		// 		echo "<pre>";
+		// 		print_r($submission);
+		// 		echo "</pre>";
+			
+
+				
+		// 		// Craft::d($submission);
+			
+        //     }
+        // );
 		
 		
 
@@ -176,10 +205,14 @@ class ActiveCampaign extends Plugin
      */
     protected function settingsHtml(): string
     {
-        return Craft::$app->view->renderTemplate(
+		
+		$settings = $this->getSettings();
+        $settings->validate();
+		
+		return Craft::$app->view->renderTemplate(
             'activecampaign/settings',
             [
-                'settings' => $this->getSettings()
+                'settings' => $settings
             ]
         );
     }

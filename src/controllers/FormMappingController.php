@@ -72,9 +72,12 @@ class FormMappingController extends Controller
 
 		$tags = ActiveCampaign::getInstance()->tags->getAllTags();
 		$variables['tags'] = ArrayHelper::map($tags, 'id', 'name');
-
 		$variables['fields'] = ActiveCampaign::getInstance()->fields->getAllFields();
 		$variables['formFields'] = ActiveCampaign::getInstance()->formMapping->getFormFields($formId);
+
+		// current values
+		$variables['tagIds'] = json_decode($variables['formMapping']['tagsJson'],true);
+		$variables['acFieldValues'] = json_decode($variables['formMapping']['fieldMappingJson'],true);
 
 		// if ($variables['formMapping']->id) {
 		// 	$variables['title'] = $variables['formMapping']->name;
@@ -82,6 +85,7 @@ class FormMappingController extends Controller
 		// 	$variables['title'] = 'Create a new ticket status';
 		// }
 
+		// Craft::dd($variables['acFieldValues']);
 		$variables['title'] = "Form Mapping";
 
 		return $this->renderTemplate('activecampaign/_layouts/forms/edit',$variables);
@@ -98,9 +102,11 @@ class FormMappingController extends Controller
 		if (!$formMapping) {
             $formMapping = new FormMappingModel();
 		}
+
+		// Craft::dd($request->post('tags'));
 		
 		$formMapping->formId = $request->post('formId');
-		$formMapping->fieldMappingJson = json_encode($request->post('acField'));
+		$formMapping->fieldMappingJson = json_encode(array_filter($request->post('acField')));
 		$formMapping->tagsJson = json_encode($request->post('tags'));
 
 		// Save it
@@ -116,14 +122,5 @@ class FormMappingController extends Controller
 		 Craft::$app->getUrlManager()->setRouteParams(compact('formMapping'));
 
 	}
-
-
-
-
-	public function actionTest() {
-		
-		ActiveCampaign::getInstance()->formMapping->getFormFields(1);
-
-	}
-
+	
 }

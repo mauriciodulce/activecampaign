@@ -87,6 +87,7 @@ class Install extends Migration
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
 					 // Custom columns in the table
+					'acFieldId' => $this->integer(255),
 					'name' => $this->string(255)->notNull()->defaultValue(''),
 					'handle' => $this->string(255)->notNull()->defaultValue(''),
                 ]
@@ -177,24 +178,27 @@ class Install extends Migration
         ];
 		$this->insert(FieldRecord::tableName(), $data);
 		
-		// Default fields
 		$data = [
             'name'      => 'Last Name',
             'handle'    => 'LASTNAME',
         ];
 		$this->insert(FieldRecord::tableName(), $data);
 		
-		// Default fields
 		$data = [
             'name'      => 'Email',
             'handle'    => 'EMAIL',
         ];
 		$this->insert(FieldRecord::tableName(), $data);
 		
-		// Default fields
 		$data = [
             'name'      => 'Phone',
             'handle'    => 'PHONE',
+        ];
+		$this->insert(FieldRecord::tableName(), $data);
+		
+		$data = [
+            'name'      => 'Note',
+            'handle'    => 'NOTE',
         ];
         $this->insert(FieldRecord::tableName(), $data);
 		

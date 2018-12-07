@@ -42,6 +42,7 @@ class FormMapping extends Component
 			$forms[] = [
 				'id' => $form->id,
 				'name' => $form->name,
+				'tags' => ActiveCampaign::$plugin->tags->getTagNamesByFormId($form->id),
 			];
 		}
 
@@ -50,7 +51,7 @@ class FormMapping extends Component
 	}
 
 	/**
-	 * returns array of fields
+	 * returns array of free form fields for the form
 	 */
 	public function getFormFields($formId)
 	{
@@ -110,7 +111,6 @@ class FormMapping extends Component
         }
 
         return true;
-
 	}
 
 	public function getFormMappingByFormId($formId)

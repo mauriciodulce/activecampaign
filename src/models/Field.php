@@ -3,6 +3,8 @@
  * ActiveCampaign plugin for Craft CMS 3.x
  *
  * Active Campaign plugin for Craft CMS
+ * 
+ * Gets Active Campagin fields
  *
  * @link      https://kurious.agency
  * @copyright Copyright (c) 2018 Kurious Agency
@@ -29,6 +31,8 @@ class Field extends Model
      * @var string
      */
 	public $id;
+
+	public $acFieldId;
 
 	public $name;
 

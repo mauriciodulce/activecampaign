@@ -51,6 +51,11 @@ class Api extends Component
 		return $this->_request($uri, $params, 'POST');
 	}
 
+	public function put($uri, $params=[])
+	{
+		return $this->_request($uri, $params, 'PUT');
+	}
+
 
 	// Private Methods
 	// =========================================================================

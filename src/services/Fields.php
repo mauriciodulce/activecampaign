@@ -29,29 +29,31 @@ class Fields extends Component
     // =========================================================================
 
 
-	public function syncFields()
+	public function updateFields()
 	{
+		$acFieldIds = [];
+		
 		$response = ActiveCampaign::$plugin->api->get('fields');
-
-		// echo "<pre>";
-		// print_r($response->fields);
-		// echo "</pre>";
-		// exit();
 
 		foreach($response->fields as $field) {
 
-			$fieldModel = $this->getFieldByHandle($field->perstag);
+			$acFieldIds[] = $field->id;
+
+			$fieldModel = $this->getFieldByAttribute(['acFieldId'=>$field->id]);
 
 			if (!$fieldModel) {
 				$fieldModel = new FieldModel();
 			}
 
+			$fieldModel->acFieldId = $field->id;
 			$fieldModel->name = $field->title;
 			$fieldModel->handle = $field->perstag;
 
 			$this->saveField($fieldModel);
 
 		}
+
+		$this->removeDeletedFields($acFieldIds);
 
 		return true;
 	}
@@ -83,6 +85,7 @@ class Fields extends Component
             $record = new FieldRecord();
         }
 
+		$record->acFieldId = $model->acFieldId;
 		$record->name = $model->name;
 		$record->handle = $model->handle;
 
@@ -108,10 +111,36 @@ class Fields extends Component
 
 	}
 
-	public function getFieldByHandle($handle)
+	public function removeDeletedFields($acFieldIds)
+	{
+		$allFields = $this->getAllFields();
+	
+		foreach($allFields as $field) {
+
+			if( ($field->acFieldId > 0) && (!in_array($field->acFieldId,$acFieldIds) )) {
+				$this->deleteFieldById($field->id);
+			}
+
+		}
+
+		return true;
+	}
+
+	public function deleteFieldById(int $id): bool
+    {
+		$field = FieldRecord::findOne($id);
+
+        if (!$field) {
+            return false;
+        }
+
+        return (bool)$field->delete();
+    }
+
+	public function getFieldByAttribute($attribute)
     {
         $result = $this->_createFieldQuery()
-            ->where(['handle' => $handle])
+            ->where($attribute)
             ->one();
 
         return new FieldModel($result);
@@ -121,10 +150,12 @@ class Fields extends Component
     {
         return (new Query())
             ->select([
-                'id',
+				'id',
+				'acFieldId',
                 'name',
                 'handle',
             ])
             ->from(['{{%activecampaign_field}}']);
-    }
+	}
+	
 }
