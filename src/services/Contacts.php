@@ -151,8 +151,10 @@ class Contacts extends Component
 		$formMappingModel = ActiveCampaign::getInstance()->formMapping->getFormMappingByFormId($formId);
 		$formMapping = json_decode($formMappingModel['fieldMappingJson'],true);
 
-		foreach($formMapping as $formFieldId => $acField) {
-			$acData[$acField] = $data[$formFieldId];
+		if(is_array($formMapping)) {
+			foreach($formMapping as $formFieldId => $acField) {
+				$acData[$acField] = $data[$formFieldId];
+			}
 		}
 
 		// echo "<pre>";
