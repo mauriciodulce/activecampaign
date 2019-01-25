@@ -160,13 +160,15 @@ class Tags extends Component
 
 	public function getTagsByFormId($formId)
 	{
-		$tagIds = [];
-
 		$formMapping = ActiveCampaign::$plugin->formMapping->getFormMappingByFormId($formId);
 		
 		$tagIds = json_decode($formMapping['tagsJson'],true);
+		
+		if ($tagIds) {
+			return $tagIds;
+		}
 
-		return $tagIds;
+		return [];
 	}
 
 	public function removeDeletedTags($acTagIds)
