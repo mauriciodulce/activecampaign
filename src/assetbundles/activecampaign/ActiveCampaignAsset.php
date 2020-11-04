@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2018 Kurious Agency
  */
 
-namespace kuriousagency\activecampaign\assetbundles\ActiveCampaign;
+namespace kuriousagency\activecampaign\assetbundles\activecampaign;
 
 use Craft;
 use craft\web\AssetBundle;
